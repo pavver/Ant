@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -88,7 +87,7 @@ namespace ant.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _work, value);
-                StartWork();
+                if (value) StartWork();
             }
         }
 
@@ -108,11 +107,11 @@ namespace ant.ViewModels
             }
         }
 
-        private int _mapSize = 128;
+        private int _mapSize = 512;
 
         public int MapSize
         {
-            get => _countColors;
+            get => _mapSize;
             set => this.RaiseAndSetIfChanged(ref _mapSize, value);
         }
 
@@ -178,8 +177,8 @@ namespace ant.ViewModels
                 }
 
                 Work = false;
-                UpdateBitmap(map._map);
                 Step = _step;
+                UpdateBitmap(map._map);
             });
         }
 
@@ -191,7 +190,7 @@ namespace ant.ViewModels
             for (var y = 0; y < _mapSize; y++)
                 PutPixel(x, y, buf, Colors[map[x, y]]);
 
-            _invalidate();
+            Task.Run(() => _invalidate());
         }
 
         private void UpdateDirections()

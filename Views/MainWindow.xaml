@@ -57,7 +57,7 @@
                   <ProgressBar Value="{Binding Step}" Minimum="0" Maximum="{Binding MaxSteps}"></ProgressBar>
                   
                   <TextBlock Text="Ключ генерации:"></TextBlock>
-                    <TextBox IsReadOnly="True" Text="{Binding Seed}"></TextBox>
+                    <TextBox Text="{Binding Seed}"></TextBox>
                   
                   <TextBlock Text="Колво цветов:"></TextBlock>
                     <Slider Minimum="1" Maximum="11" Value="{Binding CountColors}"></Slider>
