@@ -31,7 +31,6 @@ namespace ant
         private static void AppMain(Application app, string[] args)
         {
             var window = new MainWindow();
-          window.DataContext = new MainWindowViewModel( window.FindControl<Image>("Map"));
 
             app.Run(window);
         }

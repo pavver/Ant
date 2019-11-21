@@ -50,11 +50,11 @@ namespace ant.ViewModels
             set => this.RaiseAndSetIfChanged(ref _iterationsPerFrame, value);
         }
 
-        private Image _img;
+        private readonly Action _invalidate;
 
-        public MainWindowViewModel(Image img)
+        public MainWindowViewModel(Action invalidate)
         {
-            _img = img;
+            _invalidate = invalidate;
             var b = new BrushConverter();
             ButtonColors = CelColors.Select(d => b.ConvertFromString(d) as SolidColorBrush).ToArray();
             Colors = CelColors.Select(d => Color.Parse(d)).ToArray();
@@ -177,6 +177,7 @@ namespace ant.ViewModels
                         break;
                 }
 
+                Work = false;
                 UpdateBitmap(map._map);
                 Step = _step;
             });
@@ -190,7 +191,7 @@ namespace ant.ViewModels
             for (var y = 0; y < _mapSize; y++)
                 PutPixel(x, y, buf, Colors[map[x, y]]);
 
-            _img.InvalidateVisual();
+            _invalidate();
         }
 
         private void UpdateDirections()
