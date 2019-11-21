@@ -49,7 +49,7 @@
                 <StackPanel Orientation="Vertical">
                     <CheckBox IsChecked="{Binding Work}" Content="Выключатель"></CheckBox>
                   <TextBlock Text="Размер карты"></TextBlock>
-                  <TextBox Text="{Binding MapSize}"></TextBox>
+                  <TextBox IsEnabled="{Binding !Work}" Text="{Binding MapSize}"></TextBox>
                   <TextBlock Text="Итераций на кадр"></TextBlock>
                   <TextBox Text="{Binding IterationsPerFrame}"></TextBox>
                   
@@ -60,7 +60,7 @@
                     <TextBox Text="{Binding Seed}"></TextBox>
                   
                   <TextBlock Text="Колво цветов:"></TextBlock>
-                    <Slider Minimum="1" Maximum="11" Value="{Binding CountColors}"></Slider>
+                    <Slider IsEnabled="{Binding !Work}" Minimum="2" Maximum="12" Value="{Binding CountColors}"></Slider>
                     <Grid>
                         <Image Name="Map" Source="/Assets/2019-11-20_1723071.png" />
                         <Border Margin="2" Padding="5,20">

@@ -135,7 +135,11 @@ namespace ant.ViewModels
 
         public void ChangeDirection(string parameter)
         {
-            // Code for executing the command here.
+            int i = int.Parse(parameter) -1;
+            if (i > CountColors - 1) return;
+            int t = 1 << i;
+            Seed = _seed ^ t;
+            
         }
 
         public unsafe void PutPixel(double x, double y, ILockedFramebuffer buf, Color color)
@@ -154,8 +158,9 @@ namespace ant.ViewModels
             {
                 var antStart = _mapSize / 2;
 
-                var map = new Map(_mapSize, _countColors);
+                var map = new Map(_mapSize, CountColors );
                 var ant = new Ant(antStart, antStart);
+                Step = 0;
 
                 Bitmap = new WriteableBitmap(new PixelSize(_mapSize, _mapSize), new Vector(96, 96),
                     PixelFormat.Bgra8888);
@@ -198,7 +203,7 @@ namespace ant.ViewModels
 
             for (byte i = 0; i < 12; i++)
             {
-                var ret = CountColors < i ? "" : Ant.GetDirection(Seed, i) ? "→" : "←";
+                var ret = CountColors <= i ? "" : Ant.GetDirection(Seed, i) ? "→" : "←";
                 if (!string.Equals(ret, Directions[i], StringComparison.Ordinal)) Directions[i] = ret;
             }
         }
