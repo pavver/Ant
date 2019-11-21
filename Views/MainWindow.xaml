@@ -1,0 +1,111 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ant.ViewModels;assembly=ant"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+        x:Class="ant.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ant">
+
+    <Window.Styles>
+
+        <Style Selector="RadioButton">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="Grid > Button">
+          <Setter Property="Margin" Value="20,10" />
+          <Setter Property="FontSize" Value="30" />
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Styles>
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="*,200">
+        <Image Source="{Binding Bitmap}" Stretch="Fill" Cursor="Hand" Grid.Column="0" />
+        <StackPanel Grid.Column="1">
+            <Border Background="#EEEEEE">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox IsChecked="{Binding Work}" Content="Выключатель"></CheckBox>
+                  <TextBlock Text="Размер карты"></TextBlock>
+                  <TextBox Text="{Binding IterationsPerFrame}"></TextBox>
+                  <TextBlock Text="Итераций на кадр"></TextBlock>
+                  <TextBox Text="{Binding IterationsPerFrame}"></TextBox>
+                  
+                  <TextBlock Text="{Binding IterationText}"></TextBlock>
+                  <ProgressBar Value="{Binding Step}" Minimum="0" Maximum="{Binding MaxSteps}"></ProgressBar>
+                  
+                  <TextBlock Text="Ключ генерации:"></TextBlock>
+                    <TextBox IsReadOnly="True" Text="{Binding Seed}"></TextBox>
+                  
+                  <TextBlock Text="Колво цветов:"></TextBlock>
+                    <Slider Minimum="1" Maximum="11" Value="{Binding CountColors}"></Slider>
+                    <Grid>
+                        <Image Name="Map" Source="/Assets/2019-11-20_1723071.png" />
+                        <Border Margin="2" Padding="5,20">
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="70,70,70,70, 70,70">
+                                <Button Background="{Binding ButtonColors[1]}" Grid.Column="0" Grid.Row="0"
+                                        Command="{Binding ChangeDirection}" CommandParameter="1" Content="{Binding Directions[0]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[7]}" Grid.Column="1" Grid.Row="0"
+                                        Command="{Binding ChangeDirection}" CommandParameter="7" Content="{Binding Directions[6]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[2]}" Grid.Column="0" Grid.Row="1"
+                                        Command="{Binding ChangeDirection}" CommandParameter="2" Content="{Binding Directions[1]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[8]}" Grid.Column="1" Grid.Row="1"
+                                        Command="{Binding ChangeDirection}" CommandParameter="8" Content="{Binding Directions[7]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[3]}" Grid.Column="0" Grid.Row="2"
+                                        Command="{Binding ChangeDirection}" CommandParameter="3" Content="{Binding Directions[2]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[9]}" Grid.Column="1" Grid.Row="2"
+                                        Command="{Binding ChangeDirection}" CommandParameter="9" Content="{Binding Directions[8]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[4]}" Grid.Column="0" Grid.Row="3"
+                                        Command="{Binding ChangeDirection}" CommandParameter="4" Content="{Binding Directions[3]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[10]}" Grid.Column="1" Grid.Row="3"
+                                        Command="{Binding ChangeDirection}" CommandParameter="10" Content="{Binding Directions[9]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[5]}" Grid.Column="0" Grid.Row="4"
+                                        Command="{Binding ChangeDirection}" CommandParameter="5" Content="{Binding Directions[4]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[11]}" Grid.Column="1" Grid.Row="4"
+                                        Command="{Binding ChangeDirection}" CommandParameter="11" Content="{Binding Directions[10]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[6]}" Grid.Column="0" Grid.Row="5"
+                                        Command="{Binding ChangeDirection}" CommandParameter="6" Content="{Binding Directions[5]}">
+                                </Button>
+                                <Button Background="{Binding ButtonColors[12]}" Grid.Column="1" Grid.Row="5"
+                                        Command="{Binding ChangeDirection}" CommandParameter="12" Content="{Binding Directions[11]}">
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
