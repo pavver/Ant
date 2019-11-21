@@ -43,6 +43,7 @@ namespace ant.ViewModels
         public ObservableCollection<string> Directions { get; set; } = new ObservableCollection<string>();
 
         private uint _iterationsPerFrame = 1000;
+
         public uint IterationsPerFrame
         {
             get => _iterationsPerFrame;
@@ -56,7 +57,7 @@ namespace ant.ViewModels
             _img = img;
             var b = new BrushConverter();
             ButtonColors = CelColors.Select(d => b.ConvertFromString(d) as SolidColorBrush).ToArray();
-            Colors = CelColors.Select(d=> Color.Parse(d)).ToArray();
+            Colors = CelColors.Select(d => Color.Parse(d)).ToArray();
             for (int i = 0; i < 12; i++)
             {
                 Directions.Add("");
@@ -80,6 +81,7 @@ namespace ant.ViewModels
         public ulong MaxSteps { get; set; } = int.MaxValue / 4;
 
         private bool _work;
+
         public bool Work
         {
             get => _work;
@@ -106,7 +108,8 @@ namespace ant.ViewModels
             }
         }
 
-        private int _mapSize = 512;
+        private int _mapSize = 128;
+
         public int MapSize
         {
             get => _countColors;
@@ -124,6 +127,7 @@ namespace ant.ViewModels
         }
 
         private WriteableBitmap _bitmap;
+
         public WriteableBitmap Bitmap
         {
             get => _bitmap;
@@ -135,29 +139,14 @@ namespace ant.ViewModels
             // Code for executing the command here.
         }
 
-        public unsafe void PutPixel(double x, double y, int size, Color color)
+        public unsafe void PutPixel(double x, double y, ILockedFramebuffer buf, Color color)
         {
-            // Convert relative to absolute.
-            var width = Bitmap.PixelSize.Width;
-            var height = Bitmap.PixelSize.Height;
+            var pixel = color.B + ((uint) color.G << 8) + ((uint) color.R << 16) + ((uint) color.A << 24);
 
-            var px = (int)(x * width);
-            var py = (int)(y * height);
+            var ptr = (uint*) buf.Address;
+            ptr += (uint) (Bitmap.PixelSize.Width * y + x);
 
-            var pixel = color.B + ((uint)color.G << 8) + ((uint)color.R << 16) + ((uint)color.A << 24);
-
-            using var buf = Bitmap.Lock();
-            for (var x0 = px - size; x0 <= px + size; x0++)
-            for (var y0 = py - size; y0 <= py + size; y0++)
-            {
-                if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height)
-                {
-                    var ptr = (uint*)buf.Address;
-                    ptr += (uint)(width * y0 + x0);
-
-                    *ptr = pixel;
-                }
-            }
+            *ptr = pixel;
         }
 
         private void StartWork()
@@ -169,8 +158,10 @@ namespace ant.ViewModels
                 var map = new Map(_mapSize, _countColors);
                 var ant = new Ant(antStart, antStart);
 
-                Bitmap = new WriteableBitmap(new PixelSize(_mapSize, _mapSize),new Vector(1,1), PixelFormat.Bgra8888 );
-                
+                Bitmap = new WriteableBitmap(new PixelSize(_mapSize, _mapSize), new Vector(96, 96),
+                    PixelFormat.Bgra8888);
+
+
                 for (; Work && _step < MaxSteps; _step++)
                 {
                     var color = map.Step(ant.X, ant.Y);
@@ -185,15 +176,19 @@ namespace ant.ViewModels
                     if (ant.X == 0 || ant.Y == 0 || ant.X == _mapSize || ant.Y == _mapSize)
                         break;
                 }
+
+                UpdateBitmap(map._map);
+                Step = _step;
             });
         }
 
-        private  void UpdateBitmap(byte[,] map)
+        private void UpdateBitmap(byte[,] map)
         {
+            using var buf = Bitmap.Lock();
 
             for (var x = 0; x < _mapSize; x++)
             for (var y = 0; y < _mapSize; y++)
-                PutPixel(x, y,1, Colors[map[x, y]]);
+                PutPixel(x, y, buf, Colors[map[x, y]]);
 
             _img.InvalidateVisual();
         }
