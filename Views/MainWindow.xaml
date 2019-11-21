@@ -43,13 +43,13 @@
     </Design.DataContext>
 
     <Grid ColumnDefinitions="*,200">
-        <Image Source="{Binding Bitmap}" Stretch="Fill" Cursor="Hand" Grid.Column="0" />
+        <Image Source="{Binding Bitmap}" Stretch="Fill" Grid.Column="0" />
         <StackPanel Grid.Column="1">
             <Border Background="#EEEEEE">
                 <StackPanel Orientation="Vertical">
                     <CheckBox IsChecked="{Binding Work}" Content="Выключатель"></CheckBox>
                   <TextBlock Text="Размер карты"></TextBlock>
-                  <TextBox Text="{Binding IterationsPerFrame}"></TextBox>
+                  <TextBox Text="{Binding MapSize}"></TextBox>
                   <TextBlock Text="Итераций на кадр"></TextBlock>
                   <TextBox Text="{Binding IterationsPerFrame}"></TextBox>
                   
